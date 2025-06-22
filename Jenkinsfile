@@ -1,16 +1,24 @@
 pipeline {
-    agent { docker { image 'mcr.microsoft.com/playwright:v1.53.0-noble' } }
+    agent any
     
     environment {
-        CI = 'true'
-        // Use system Node.js (make sure it's installed on the agent)
+        CI = 'Abdelrahman Fahd --------------------------------------------------'
+             // Use system Node.js (make sure it's installed on the agent)
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
     }
     
-    stages {   
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                bat 'npm ci'
+                // Install browsers (remove if already installed globally)
+                bat 'npx playwright install'
             }
         }
         
