@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:DarkMode": "powershell -Command \"$env:CI='true'; $env:market='PT'; npx playwright test -g 'Dark Mode'\""
+    "test:DarkMode": "powershell -Command \"$env:market='PT'; npx playwright test -g 'Dark Mode'\""
   },
   "keywords": [],
   "author": "",

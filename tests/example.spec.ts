@@ -29,4 +29,5 @@ test('Dark Mode', async ({ page }) => {
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
     .analyze();
   console.log(accessibilityScanResults.violations)
+  console.log(process.env.CI)
 })
