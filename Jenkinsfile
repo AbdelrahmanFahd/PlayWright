@@ -6,6 +6,18 @@ pipeline {
              // Use system Node.js (make sure it's installed on the agent)
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
     }
+
+    parameters{
+        choice(
+            name:'Market',
+            choices:[
+                'US',
+                'EU',
+                'APAC'
+            ],
+            description:'Select the market for testing'
+        )
+    }
     
     stages {
         stage('Checkout') {
