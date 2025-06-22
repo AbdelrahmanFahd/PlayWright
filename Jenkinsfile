@@ -29,22 +29,4 @@ pipeline {
         }
     }
     
-    post {
-        always {
-            // Archive HTML report
-            publishHTML(
-                target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright Report'
-                ]
-            )
-            
-            // Optional: Archive test artifacts
-            archiveArtifacts artifacts: 'test-results/**/*', fingerprint: true
-        }
-    }
 }
