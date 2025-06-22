@@ -24,7 +24,7 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                bat 'npm run test:DarkMode'
+                powershell 'npm run test:DarkMode'
             }
         }
     }
