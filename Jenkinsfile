@@ -2,9 +2,7 @@ pipeline {
     agent any
     
     environment {
-        CI = 'true'
-        // Use system Node.js (make sure it's installed on the agent)
-        PATH = "${env.PATH};C:\\Program Files\\nodejs"
+        CI = 'Abdelrahman Fahd --------------------------------------------------'
     }
     
     stages {
