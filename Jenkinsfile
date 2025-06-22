@@ -1,30 +1,29 @@
 pipeline {
-    agent any
-
+    agent { docker { image 'mcr.microsoft.com/playwright:v1.53.0-noble' } }
+    
     environment {
         CI = 'true'
+        // Use system Node.js (make sure it's installed on the agent)
+        PATH = "${env.PATH};C:\\Program Files\\nodejs"
     }
-
-    stages {
-        stage('Install dependencies') {
+    
+    stages {   
+        stage('Install Dependencies') {
             steps {
-                sh 'npm ci' // Clean install for consistency
+                sh 'npm ci'
             }
         }
         
-        stage('Run Playwright tests') {
+        stage('Run Tests') {
             steps {
-                powershell 'npx playwright test' // Run your tests
+                powershell 'npm run test:DarkMode'
             }
         }
     }
     
     post {
         always {
-            // Archive the HTML report
-            archiveArtifacts artifacts: 'playwright-report/**/*', fingerprint: true
-            
-            // Publish HTML report (requires HTML Publisher plugin)
+            // Archive HTML report
             publishHTML(
                 target: [
                     allowMissing: false,
@@ -32,9 +31,12 @@ pipeline {
                     keepAll: true,
                     reportDir: 'playwright-report',
                     reportFiles: 'index.html',
-                    reportName: 'Playwright HTML Report'
+                    reportName: 'Playwright Report'
                 ]
             )
+            
+            // Optional: Archive test artifacts
+            archiveArtifacts artifacts: 'test-results/**/*', fingerprint: true
         }
     }
 }
