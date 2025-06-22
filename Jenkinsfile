@@ -37,7 +37,7 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                powershell 'npm run test:DarkMode${params.Market}'
+                powershell 'npm run test:${params.Market}'
             }
         }
     }
