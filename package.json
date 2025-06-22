@@ -1,0 +1,18 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:DarkMode": "powershell -Command \"$env:CI='true'; $env:market='PT'; npx playwright test -g 'Dark Mode'\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3",
+    "dotenv": "^16.5.0"
+  }
+}
