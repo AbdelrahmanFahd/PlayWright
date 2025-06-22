@@ -1,11 +1,5 @@
 pipeline {
     agent any
-    
-    environment {
-        CI = 'Abdelrahman Fahd --------------------------------------------------'
-             // Use system Node.js (make sure it's installed on the agent)
-        PATH = "${env.PATH};C:\\Program Files\\nodejs"
-    }
 
     parameters{
         choice(
@@ -18,6 +12,13 @@ pipeline {
             description:'Select the market for testing'
         )
     }
+
+    environment {
+        CI = 'Abdelrahman Fahd --------------------------------------------------'
+             // Use system Node.js (make sure it's installed on the agent)
+        PATH = "${env.PATH};C:\\Program Files\\nodejs"
+    }
+
     
     stages {
         stage('Checkout') {
@@ -36,7 +37,7 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                powershell 'npm run test:DarkMode'
+                powershell 'npm run test:DarkMode${params.Market}'
             }
         }
     }
