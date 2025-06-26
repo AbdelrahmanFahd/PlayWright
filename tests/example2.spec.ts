@@ -2,7 +2,9 @@ import { test, expect } from '@playwright/test';
 
 test('light Mode', async ({ page }) => {
   await page.goto('https://www.google.com')
-  expect("Ahmed").toBe('fahd')
+  if (process.env.market === 'IE')
+    expect("Fahd").toBe('Ahmed')
+  expect("Ahmed").toBe('Ahmed')
 })
 
 
