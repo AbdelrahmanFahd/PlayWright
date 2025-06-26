@@ -26,14 +26,14 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo "Market PT is running"
-                powershell 'npm run test:DarkMode'
+                powershell 'npm run test:DarkMode:PT'
             }
         }
 
           stage('Run Tests2') {
             steps {
                 echo "Market IE is running"
-                powershell 'npm run test:DarkMode'
+                powershell 'npm run test:DarkMode:IE'
             }
         }
     }
