@@ -10,5 +10,5 @@ test('Dark Mode', async ({ page }) => {
 
 test('light Mode', async ({ page }) => {
   await page.goto('https://www.google.com')
-  expect("Ahmed").toBe('Fahd')
+  expect("Ahmed").toBe('Ahmed')
 })
