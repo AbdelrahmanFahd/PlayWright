@@ -1,18 +1,6 @@
 pipeline {
     agent any
 
-    parameters{
-        choice(
-            name:'Market',
-            choices:[
-                'US',
-                'EU',
-                'APAC'
-            ],
-            description:'Select the market for testing'
-        )
-    }
-
     environment {
         CI = 'Abdelrahman Fahd --------------------------------------------------'
              // Use system Node.js (make sure it's installed on the agent)
@@ -41,7 +29,7 @@ pipeline {
                 powershell 'npm run test:DarkMode'
             }
         }
-        
+
           stage('Run Tests2') {
             steps {
                 echo "Market IE is running"
@@ -50,17 +38,29 @@ pipeline {
         }
     }
     
-    post {
+       post {
         always {
-            // Archive HTML report
+            // Archive PT HTML report
             publishHTML(
                 target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'playwright-report',
+                    reportDir: 'playwright-report-pt',
                     reportFiles: 'index.html',
-                    reportName: 'Playwright Report'
+                    reportName: 'Playwright Report - PT'
+                ]
+            )
+            
+            // Archive IE HTML report
+            publishHTML(
+                target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-report-ie',
+                    reportFiles: 'index.html',
+                    reportName: 'Playwright Report - IE'
                 ]
             )
             
