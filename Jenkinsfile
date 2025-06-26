@@ -1,12 +1,24 @@
 pipeline {
     agent any
 
-    environment {
-        CI = 'Abdelrahman Fahd --------------------------------------------------'
-             // Use system Node.js (make sure it's installed on the agent)
-        PATH = "${env.PATH};C:\\Program Files\\nodejs"
+    parameters {
+        choice(
+            name: 'RUN_MODE',
+            choices: ['ALL_MARKETS', 'SPECIFIC_MARKET'],
+            description: 'Choose to run all markets or select specific one'
+        )
+        choice(
+            name: 'MARKET',
+            choices: ['PT', 'IE', 'US', 'EU'],
+            description: 'Select specific market (when RUN_MODE=SPECIFIC_MARKET)',
+            defaultValue: 'PT'
+        )
     }
 
+    environment {
+        CI = 'Abdelrahman Fahd --------------------------------------------------'
+        PATH = "${env.PATH};C:\\Program Files\\nodejs"
+    }
     
     stages {
         stage('Checkout') {
@@ -18,54 +30,91 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat 'npm ci'
-                // Install browsers (remove if already installed globally)
                 bat 'npx playwright install'
             }
         }
         
         stage('Run Tests') {
-            steps {
-                echo "Market PT is running"
-                powershell 'npm run test:DarkMode:PT'
+            when {
+                expression { 
+                    params.RUN_MODE == 'ALL_MARKETS' || 
+                    params.RUN_MODE == null // Allows Build Now to work
+                }
+            }
+            stages {
+                stage('Market PT') {
+                    steps {
+                        echo "Market PT is running"
+                        powershell 'npm run test:DarkMode:PT'
+                    }
+                }
+                stage('Market IE') {
+                    steps {
+                        echo "Market IE is running"
+                        powershell 'npm run test:DarkMode:IE'
+
+                    }
+                }
             }
         }
-
-          stage('Run Tests2') {
+        
+        stage('Run Specific Market') {
+            when {
+                expression { params.RUN_MODE == 'SPECIFIC_MARKET' }
+            }
             steps {
-                echo "Market IE is running"
-                powershell 'npm run test:DarkMode:IE'
+                script {
+                    echo "Market ${params.MARKET} is running"
+                    powershell "npm run test:${params.MARKET}"
+                }
             }
         }
     }
     
-       post {
+    post {
         always {
-            // Archive PT HTML report
-            publishHTML(
-                target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report-pt',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright Report - PT'
-                ]
-            )
-            
-            // Archive IE HTML report
-            publishHTML(
-                target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report-ie',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright Report - IE'
-                ]
-            )
-            
-            // Optional: Archive test artifacts
-            archiveArtifacts artifacts: 'test-results/**/*', fingerprint: true
+            script {
+                // Handle reports for ALL_MARKETS mode or Build Now
+                if (params.RUN_MODE == 'ALL_MARKETS' || params.RUN_MODE == null) {
+                    publishHTML(
+                        target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'playwright-report-pt',
+                            reportFiles: 'index.html',
+                            reportName: 'Playwright Report - PT'
+                        ]
+                    )
+                    publishHTML(
+                        target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'playwright-report-ie',
+                            reportFiles: 'index.html',
+                            reportName: 'Playwright Report - IE'
+                        ]
+                    )
+                }
+                
+                // Handle report for SPECIFIC_MARKET mode
+                if (params.RUN_MODE == 'SPECIFIC_MARKET') {
+                    publishHTML(
+                        target: [
+                            allowMissing: false,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: "playwright-report-${params.MARKET.toLowerCase()}",
+                            reportFiles: 'index.html',
+                            reportName: "Playwright Report - ${params.MARKET}"
+                        ]
+                    )
+                }
+                
+                // Archive all test artifacts
+                archiveArtifacts artifacts: 'test-results/**/*', fingerprint: true
+            }
         }
     }
 }
