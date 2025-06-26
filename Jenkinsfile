@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script {
-                    def markets = ['PT', 'IE', 'US', 'EU']
+                    def markets = ['PT', 'IE']
                     def branches = [:]
                     for (m in markets) {
                         branches["Market ${m}"] = {
