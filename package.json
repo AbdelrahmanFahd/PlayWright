@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:DarkMode:PT": "powershell -Command \"$env:market='PT'; $env:PLAYWRIGHT_HTML_REPORT='playwright-report-pt'; npx playwright test -g 'Dark Mode'\"",
-    "test:DarkMode:IE": "powershell -Command \"$env:market='IE'; $env:PLAYWRIGHT_HTML_REPORT='playwright-report-ie'; npx playwright test -g 'Dark Mode'\"",
-    "test:PT": "powershell -Command \"$env:market='PT';  npx playwright test -g 'Dark Mode'\"",
-    "test:IE": "powershell -Command \"$env:market='IE';  npx playwright test -g 'Dark Mode'\""
+    "test:DarkMode:PT": "powershell -Command \"$env:market='PT'; $env:PLAYWRIGHT_HTML_REPORT='playwright-report-pt'; npx playwright test example2.spec.ts\"",
+    "test:DarkMode:IE": "powershell -Command \"$env:market='IE'; $env:PLAYWRIGHT_HTML_REPORT='playwright-report-ie'; npx playwright test example2.spec.ts\""
   },
   "keywords": [],
   "author": "",
