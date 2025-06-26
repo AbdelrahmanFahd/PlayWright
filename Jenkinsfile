@@ -42,9 +42,8 @@ pipeline {
                     steps {
                         echo "Market PT is running"
                         script {
-                            def PLAYWRIGHT_HTML_REPORT = "playwright-report-pt"
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                                withEnv(["PLAYWRIGHT_HTML_REPORT=${PLAYWRIGHT_HTML_REPORT}"]) {
+                                withEnv(["PLAYWRIGHT_HTML_REPORT=playwright-report-pt"]) {
                                     powershell 'npm run test:DarkMode:PT'
                                 }
                             }
@@ -55,9 +54,8 @@ pipeline {
                     steps {
                         echo "Market IE is running"
                         script {
-                            def PLAYWRIGHT_HTML_REPORT = "playwright-report-ie"
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                                withEnv(["PLAYWRIGHT_HTML_REPORT=${PLAYWRIGHT_HTML_REPORT}"]) {
+                                withEnv(["PLAYWRIGHT_HTML_REPORT=playwright-report-ie"]) {
                                 powershell 'npm run test:DarkMode:IE'
                               }   
                           }
