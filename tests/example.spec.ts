@@ -21,16 +21,7 @@ test('get started link', async ({ page }) => {
 
 test('Dark Mode', async ({ page }) => {
   await page.goto('https://playwright.dev/')
-  const result = await new AxeBuilder({ page })
-    .disableRules(['empty-heading'])
-    .analyze()
-  console.log(result.violations)
-  const accessibilityScanResults = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-    .analyze();
-  console.log(accessibilityScanResults.violations)
-  console.log(process.env.CI)
-  await page.context().storageState({ path: 'tests/StorageState.json' })
+  console.log("Market is:" + process.env.market)
 })
 
 
