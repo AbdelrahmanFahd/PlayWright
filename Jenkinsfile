@@ -63,7 +63,7 @@ pipeline {
             steps {
                 script {
                     echo "Market ${params.MARKET} is running"
-                    powershell "npm run test:${params.MARKET}"
+                    powershell "npm run test:DarkMode:${params.MARKET}"
                 }
             }
         }
