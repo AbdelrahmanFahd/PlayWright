@@ -30,4 +30,17 @@ test('Dark Mode', async ({ page }) => {
     .analyze();
   console.log(accessibilityScanResults.violations)
   console.log(process.env.CI)
+  await page.context().storageState({ path: 'tests/StorageState.json' })
+})
+
+
+test('Udemy Test', async ({ page }) => {
+  await page.goto('https://www.facebook.com')
+  await page.waitForTimeout(3000)
+})
+
+
+test('Online Course Test2', async ({ page }) => {
+  await page.goto("https://www.google.com")
+  await page.waitForTimeout(3000)
 })
