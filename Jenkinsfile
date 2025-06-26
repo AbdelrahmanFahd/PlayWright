@@ -37,20 +37,28 @@ pipeline {
             when {
                 expression { 
                     params.RUN_MODE == 'ALL_MARKETS' || 
-                    params.RUN_MODE == null // Allows Build Now to work
+                    params.RUN_MODE == null
                 }
             }
             stages {
                 stage('Market PT') {
                     steps {
                         echo "Market PT is running"
-                        powershell 'npm run test:DarkMode:PT'
+                        script {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                                powershell 'npm run test:DarkMode:PT'
+                            }
+                        }
                     }
                 }
                 stage('Market IE') {
                     steps {
                         echo "Market IE is running"
-                        powershell 'npm run test:DarkMode:IE'
+                        script {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                                powershell 'npm run test:DarkMode:IE'
+                            }
+                        }
                     }
                 }
             }
@@ -76,7 +84,7 @@ pipeline {
                 if (params.RUN_MODE == 'ALL_MARKETS' || params.RUN_MODE == null) {
                     publishHTML(
                         target: [
-                            allowMissing: false,
+                            allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
                             reportDir: 'playwright-report-pt',
@@ -86,7 +94,7 @@ pipeline {
                     )
                     publishHTML(
                         target: [
-                            allowMissing: false,
+                            allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
                             reportDir: 'playwright-report-ie',
@@ -100,7 +108,7 @@ pipeline {
                 if (params.RUN_MODE == 'SPECIFIC_MARKET') {
                     publishHTML(
                         target: [
-                            allowMissing: false,
+                            allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
                             reportDir: "playwright-report-${params.MARKET.toLowerCase()}",
@@ -113,6 +121,10 @@ pipeline {
                 // Archive all test artifacts
                 archiveArtifacts artifacts: 'test-results/**/*', fingerprint: true
             }
+        }
+        
+        failure {
+            echo "One or more test stages failed"
         }
     }
 }
