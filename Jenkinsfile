@@ -15,7 +15,7 @@ pipeline {
     }
 
     environment {
-        CI = 'Abdelrahman Fahd --------------------------------------------------'
+        CI = 'true'
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
         PLAYWRIGHT_HTML_REPORT = 'playwright-report-${params.MARKET.toLowerCase()}'
     }
@@ -80,32 +80,22 @@ pipeline {
     post {
         always {
             script {
+                def markets = ['PT', 'IE', 'US', 'EU']
                 // Handle reports for ALL_MARKETS mode or Build Now
-                if (params.RUN_MODE == 'ALL_MARKETS' || params.RUN_MODE == null) {
+                if (params.RUN_MODE == 'ALL_MARKETS') {
+                    for (m in markets) {
                     publishHTML(
                         target: [
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
-                            reportDir: 'playwright-report-pt',
+                            reportDir: "playwright-report-${m.toLowerCase()}",
                             reportFiles: 'index.html',
-                            reportName: 'Playwright Report - PT'
-                        ]
-                    )
-                    publishHTML(
-                        target: [
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'playwright-report-ie',
-                            reportFiles: 'index.html',
-                            reportName: 'Playwright Report - IE'
+                            reportName: "Playwright Report - ${m}"
                         ]
                     )
                 }
-                
-                // Handle report for SPECIFIC_MARKET mode
-                if (params.RUN_MODE == 'SPECIFIC_MARKET') {
+                } else {
                     publishHTML(
                         target: [
                             allowMissing: true,
