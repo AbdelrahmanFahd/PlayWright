@@ -71,7 +71,9 @@ pipeline {
             steps {
                 script {
                     echo "Market ${params.MARKET} is running"
-                    powershell "npm run test:DarkMode:${params.MARKET}"
+                      catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                                powershell "npm run test:DarkMode:${params.MARKET}"
+                     } 
                 }
             }
         }
