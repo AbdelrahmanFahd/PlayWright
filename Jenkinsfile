@@ -17,7 +17,7 @@ pipeline {
     environment {
         CI = 'true'
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
-        PLAYWRIGHT_HTML_REPORT = 'playwright-report-${params.MARKET.toLowerCase()}'
+        // PLAYWRIGHT_HTML_REPORT = 'playwright-report-${params.MARKET.toLowerCase()}'
     }
     
     stages {
