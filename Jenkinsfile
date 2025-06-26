@@ -17,6 +17,7 @@ pipeline {
     environment {
         CI = 'Abdelrahman Fahd --------------------------------------------------'
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
+        PLAYWRIGHT_HTML_REPORT = 'playwright-report-${params.MARKET.toLowerCase()}'
     }
     
     stages {
@@ -35,10 +36,7 @@ pipeline {
         
         stage('Run Tests') {
             when {
-                expression { 
-                    params.RUN_MODE == 'ALL_MARKETS' || 
-                    params.RUN_MODE == null
-                }
+                expression { params.RUN_MODE == 'ALL_MARKETS' }
             }
             stages {
                 stage('Market PT') {
