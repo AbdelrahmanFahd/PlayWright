@@ -37,30 +37,21 @@ pipeline {
             when {
                 expression { params.RUN_MODE == 'ALL_MARKETS' }
             }
-            stages {
-                stage('Market PT') {
-                    steps {
-                        echo "Market PT is running"
-                        script {
+            steps {
+                script {
+                    def markets = ['PT', 'IE', 'US', 'EU']
+                    def branches = [:]
+                    for (m in markets) {
+                        branches["Market ${m}"] = {
+                            echo "Market ${m} is running"
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                                withEnv(["PLAYWRIGHT_HTML_REPORT=playwright-report-pt"]) {
-                                    powershell 'npm run test:DarkMode:PT'
+                                withEnv(["PLAYWRIGHT_HTML_REPORT=playwright-report-${m.toLowerCase()}"]) {
+                                    powershell "npm run test:DarkMode:${m}"
                                 }
                             }
                         }
                     }
-                }
-                stage('Market IE') {
-                    steps {
-                        echo "Market IE is running"
-                        script {
-                            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                                withEnv(["PLAYWRIGHT_HTML_REPORT=playwright-report-ie"]) {
-                                powershell 'npm run test:DarkMode:IE'
-                              }   
-                          }
-                        }
-                    }
+                    parallel branches
                 }
             }
         }
