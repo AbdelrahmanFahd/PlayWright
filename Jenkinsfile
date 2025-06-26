@@ -37,7 +37,11 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                echo "Market ${params.Market} is running"
+                echo "Market PT is running"
+                powershell 'npm run test:DarkMode'
+                echo "Market IE is running"
+                powershell 'npm run test:DarkMode'
+                echo "Market GR is running"
                 powershell 'npm run test:DarkMode'
             }
         }
