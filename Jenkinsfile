@@ -10,8 +10,7 @@ pipeline {
         choice(
             name: 'MARKET',
             choices: ['PT', 'IE', 'US', 'EU'],
-            description: 'Select specific market (when RUN_MODE=SPECIFIC_MARKET)',
-            defaultValue: 'PT'
+            description: 'Select specific market (when RUN_MODE=SPECIFIC_MARKET)'
         )
     }
 
@@ -52,7 +51,6 @@ pipeline {
                     steps {
                         echo "Market IE is running"
                         powershell 'npm run test:DarkMode:IE'
-
                     }
                 }
             }
