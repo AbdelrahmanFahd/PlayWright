@@ -23,6 +23,7 @@ test('Dark Mode', async ({ page }) => {
   if (process.env.market === 'PT')
     await page.goto('https://www.google.dev/')
   await page.goto('https://playwright.dev/')
+  expect("Ahmed").toBe('Fahd')
   console.log("Market is:" + process.env.market)
 })
 
