@@ -6,7 +6,7 @@ dotenv.config({ path: './tests/auth.env' });
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
-  workers: 2,
+  workers: 1,
   reporter: [
     ['html', { outputFolder: process.env.PLAYWRIGHT_HTML_REPORT || 'playwright-report' }]
   ],
