@@ -17,7 +17,6 @@ pipeline {
     environment {
         CI = 'true'
         PATH = "${env.PATH};C:\\Program Files\\nodejs"
-        PLAYWRIGHT_HTML_REPORT = "playwright-report-${params.MARKET.toLowerCase()}"
     }
     
     stages {
@@ -43,8 +42,11 @@ pipeline {
                     steps {
                         echo "Market PT is running"
                         script {
+                            def PLAYWRIGHT_HTML_REPORT = "playwright-report-pt"
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                                powershell 'npm run test:DarkMode:PT'
+                                withEnv(["PLAYWRIGHT_HTML_REPORT=${PLAYWRIGHT_HTML_REPORT}"]) {
+                                    powershell 'npm run test:DarkMode:PT'
+                                }
                             }
                         }
                     }
@@ -53,9 +55,12 @@ pipeline {
                     steps {
                         echo "Market IE is running"
                         script {
+                            def PLAYWRIGHT_HTML_REPORT = "playwright-report-ie"
                             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                                withEnv(["PLAYWRIGHT_HTML_REPORT=${PLAYWRIGHT_HTML_REPORT}"]) {
                                 powershell 'npm run test:DarkMode:IE'
-                            }
+                              }   
+                          }
                         }
                     }
                 }
@@ -101,7 +106,7 @@ pipeline {
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
-                            reportDir: "playwright-report-${params.MARKET.toLowerCase()}",
+                            reportDir: "playwright-report",
                             reportFiles: 'index.html',
                             reportName: "Playwright Report - ${params.MARKET}"
                         ]
