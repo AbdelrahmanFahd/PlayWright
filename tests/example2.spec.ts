@@ -4,7 +4,7 @@ test('light Mode', async ({ page }) => {
   console.log('=============>' + process.env.PLAYWRIGHT_HTML_REPORT)
   await page.goto('https://www.google.com')
   if (process.env.market === 'IE')
-    expect("Fahd").toBe('Ahmed')
+    expect.soft("Fahd").toBe('Ahmed')
   expect("Ahmed").toBe('Ahmed')
 })
 
